@@ -117,21 +117,21 @@ export default function SkinsCard({ isSlim, skin_id, skinname, skinsource }: Pro
                          alt="" className="w-32 h-72"/>
                 </div>
                 <div className="border-t-2 border-t-gray-700 pt-2 pr-4 pl-4 w-full justify-center flex">
-                    <Button onClick={() => {
+                    <Button title="Copy command" onClick={() => {
                         toast({
                             title: "Command copied in your clipboard.",
                             description: "Just paste it in game chat!",
                         })
                         navigator.clipboard.writeText(`/skin set ${skinsource}`)
                     }}><Clipboard /></Button>
-                    <Button variant="destructive" className="mr-5 ml-5" onClick={() => {
+                    <Button title="Delete" variant="destructive" className="mr-5 ml-5" onClick={() => {
                         axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin_id}`, {
                             headers: {
                                 'Authorization': `Bearer ${localStorage.getItem("token")}`
                             }
                         }).then(() => window.location.reload())
                     }}><Trash2 /></Button>
-                    <Button onClick={() => {
+                    <Button title="Download" onClick={() => {
                         window.location.href = `https://mineskin.eu/download/${skinsource}`
                     }}><Download /></Button>
                 </div>
