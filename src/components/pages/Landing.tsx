@@ -35,7 +35,6 @@ export default function Landing() {
     }
     const [isLoading, setLoading] = useState(true)
     const [skins, setSkins] = useState<skin[]>([])
-    const imgbbAPIKey = ""
     const [type, setType] = useState("file")
     const FormSchema = z.object({
         name: z.string().max(15).trim().min(1, {
@@ -86,7 +85,7 @@ export default function Landing() {
         const formData = new FormData();
         formData.append("image", file)
         try {
-            axios.post(`https://api.imgbb.com/1/upload?key=${imgbbAPIKey}`, formData)
+            axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_TOKEN}`, formData)
                 .then((response) => {
                     if (response.status === 200) {
                         axios.post("https://lalkaxz-server.loca.lt/skins", {
