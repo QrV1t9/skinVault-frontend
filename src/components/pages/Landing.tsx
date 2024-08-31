@@ -27,9 +27,15 @@ import axios from "axios";
 import LoadingSkeleton from "@/LoadingSkeleton.tsx";
 
 export default function Landing() {
+    interface skin {
+        isSlim: boolean;
+        skin_id: number;
+        skinname: string;
+        skinsource: string;
+    }
     const [isLoading, setLoading] = useState(true)
-    const [skins, setSkins] = useState()
-    const imgbbAPIKey = "c8be40cd75128eab7cde9aae3de74524"
+    const [skins, setSkins] = useState<skin[]>([])
+    const imgbbAPIKey = ""
     const [type, setType] = useState("file")
     const FormSchema = z.object({
         name: z.string().max(15).trim().min(1, {
@@ -66,8 +72,15 @@ export default function Landing() {
             type: "file"
         }
     })
+    interface data {
+        type: "file" | "username";
+        name: string;
+        isSlim: "False" | "True";
+        file?: any;
+        username?: string | undefined;
+    }
 
-   const onSubmit = (data) => {
+   const onSubmit = (data: data): void => {
         if (data.type === "file" && data.file?.[0]) {
         const file = data.file[0] as File;
         const formData = new FormData();
@@ -165,7 +178,11 @@ export default function Landing() {
                                                 <FormControl>
                                                     <RadioGroup
                                                         onValueChange={(e) => {
-                                                            form.setValue("type", e)
+                                                            if (e === "file") {
+                                                                form.setValue("type", "file")
+                                                            } else {
+                                                                form.setValue("type", "username")
+                                                            }
                                                             setType(e)
                                                         }}
                                                         defaultValue={field.value}
@@ -264,8 +281,8 @@ export default function Landing() {
                     <p className="font-bold mb-3 text-xl"></p>
                 </header>
                 <main>
-                    {skins.map(skin =>
-                        <SkinsCard skin={skin} key={`${skin.skinName}${skin.skin_id}`}/>
+                    {skins.map((skin: skin)  =>
+                        <SkinsCard {...skin} key={`${skin.skinname}${skin.skin_id}`}/>
                     )}
                 </main>
             </>

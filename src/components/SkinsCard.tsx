@@ -2,12 +2,8 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import axios from "axios"
 import { Trash2, Download, Clipboard } from "lucide-react"
-function downloadFile(url, fileName) {
-    return axios({
-        url,
-        method: 'GET',
-        responseType: 'blob',
-    })
+const downloadFile = (url: string, fileName: string) => {
+    axios.get(url)
         .then(response => {
             const href = window.URL.createObjectURL(response.data);
 
@@ -27,20 +23,27 @@ function downloadFile(url, fileName) {
         });
 }
 
-export default function SkinsCard({ skin }) {
+interface Props {
+    isSlim: boolean,
+    skin_id: number,
+    skinname: string,
+    skinsource: string,
+}
+
+export default function SkinsCard({ isSlim, skin_id, skinname, skinsource }: Props) {
     const { toast } = useToast()
     const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
     const regex = new RegExp(expression);
-    if (skin.skinsource.match(regex)) {
-        if (skin.isSlim) {
+    if (skinsource.match(regex)) {
+        if (isSlim) {
             return (
                 <div
                     className="h-[28rem] items-center justify-center inline-flex flex-col border-2 rounded-xl border-gray-700 m-10">
                     <div
-                        className="w-full text-center font-bold font-size pb-2 text-3xl border-b-2 border-b-gray-700">{skin.skinname}</div>
+                        className="w-full text-center font-bold font-size pb-2 text-3xl border-b-2 border-b-gray-700">{skinname}</div>
                     <div className="w-full flex justify-center pb-5 pt-5">
                         <img
-                            src={`https://starlightskins.lunareclipse.studio/render/ultimate/Null/full?skinUrl=${skin.skinsource}`}
+                            src={`https://starlightskins.lunareclipse.studio/render/ultimate/Null/full?skinUrl=${skinsource}`}
                             alt="" className="w-32 h-72"/>
                     </div>
                     <div className="border-t-2 border-t-gray-700 pt-2 w-full pr-4 pl-4  justify-center flex">
@@ -49,10 +52,10 @@ export default function SkinsCard({ skin }) {
                                 title: "Command copied in your clipboard.",
                                 description: "Just paste it in game chat!",
                             })
-                            navigator.clipboard.writeText(`/skin url ${skin.skinsource} CLASSIC`)
+                            navigator.clipboard.writeText(`/skin url ${skinsource} CLASSIC`)
                         }}><Clipboard /></Button>
                         <Button variant="destructive" className="mr-5 ml-5" onClick={() => {
-                            axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin.skin_id}`, {
+                            axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin_id}`, {
                                 headers: {
                                     'Authorization': `Bearer ${localStorage.getItem("token")}`
                                 }
@@ -62,7 +65,7 @@ export default function SkinsCard({ skin }) {
                             )
                         }}><Trash2 /></Button>
                         <Button onClick={() => {
-                            downloadFile(skin.skinsource, "skin");
+                            downloadFile(skinsource, "skin");
                         }}><Download /></Button>
                     </div>
 
@@ -74,10 +77,10 @@ export default function SkinsCard({ skin }) {
                 <div
                     className="h-[28rem] items-center justify-center inline-flex flex-col border-2 rounded-xl border-gray-700 m-10">
                     <div
-                        className="w-full text-center font-bold font-size pb-2 text-3xl border-b-2 border-b-gray-700">{skin.skinname}</div>
+                        className="w-full text-center font-bold font-size pb-2 text-3xl border-b-2 border-b-gray-700">{skinname}</div>
                     <div className="w-full flex justify-center pb-5 pt-5">
                         <img
-                            src={`https://starlightskins.lunareclipse.studio/render/ultimate/Null/full?skinUrl=${skin.skinsource}`}
+                            src={`https://starlightskins.lunareclipse.studio/render/ultimate/Null/full?skinUrl=${skinsource}`}
                             alt="" className="w-32 h-72"/>
                     </div>
                     <div className="border-t-2 border-t-gray-700 pt-2 pr-4 pl-4 w-full justify-center flex">
@@ -86,17 +89,17 @@ export default function SkinsCard({ skin }) {
                                 title: "Command copied in your clipboard.",
                                 description: "Just paste it in game chat!",
                             })
-                            navigator.clipboard.writeText(`/skin url ${skin.skinsource} SLIM`)
+                            navigator.clipboard.writeText(`/skin url ${skinsource} SLIM`)
                         }}><Clipboard /></Button>
                         <Button variant="destructive" className="mr-5 ml-5" onClick={() => {
-                            axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin.skin_id}`, {
+                            axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin_id}`, {
                                 headers: {
                                     'Authorization': `Bearer ${localStorage.getItem("token")}`
                                 }
                             }).then(() => window.location.reload())
                         }}><Trash2 /></Button>
                         <Button onClick={() => {
-                            downloadFile(skin.skinsource, "skin");
+                            downloadFile(skinsource, "skin");
                         }}><Download /></Button>
                     </div>
 
@@ -108,9 +111,9 @@ export default function SkinsCard({ skin }) {
             <div
                 className="h-[28rem] items-center justify-center inline-flex flex-col border-2 rounded-xl border-gray-700 m-10">
                 <div
-                    className="w-full text-center font-bold font-size pb-2 text-3xl border-b-2 border-b-gray-700">{skin.skinname}</div>
+                    className="w-full text-center font-bold font-size pb-2 text-3xl border-b-2 border-b-gray-700">{skinname}</div>
                 <div className="w-full flex justify-center pb-5 pt-5">
-                    <img src={`https://starlightskins.lunareclipse.studio/render/ultimate/${skin.skinsource}/full`}
+                    <img src={`https://starlightskins.lunareclipse.studio/render/ultimate/${skinsource}/full`}
                          alt="" className="w-32 h-72"/>
                 </div>
                 <div className="border-t-2 border-t-gray-700 pt-2 pr-4 pl-4 w-full justify-center flex">
@@ -119,17 +122,17 @@ export default function SkinsCard({ skin }) {
                             title: "Command copied in your clipboard.",
                             description: "Just paste it in game chat!",
                         })
-                        navigator.clipboard.writeText(`/skin set ${skin.skinsource}`)
+                        navigator.clipboard.writeText(`/skin set ${skinsource}`)
                     }}><Clipboard /></Button>
                     <Button variant="destructive" className="mr-5 ml-5" onClick={() => {
-                        axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin.skin_id}`, {
+                        axios.delete(`https://lalkaxz-server.loca.lt/skins/remove/${skin_id}`, {
                             headers: {
                                 'Authorization': `Bearer ${localStorage.getItem("token")}`
                             }
                         }).then(() => window.location.reload())
                     }}><Trash2 /></Button>
                     <Button onClick={() => {
-                        window.location.href = `https://mineskin.eu/download/${skin.skinsource}`
+                        window.location.href = `https://mineskin.eu/download/${skinsource}`
                     }}><Download /></Button>
                 </div>
             </div>
